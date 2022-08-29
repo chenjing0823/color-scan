@@ -6,4 +6,4 @@
 
 可以复制生成的文件内容，到json美化工具内查看
 
-[json美化工具](chrome-extension://pkgccpejnmalmdinmhkkfafefagiiiad/dynamic/index.html?tool=json-format)
+json美化工具：chrome-extension://pkgccpejnmalmdinmhkkfafefagiiiad/dynamic/index.html?tool=json-format
