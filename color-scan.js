@@ -31,9 +31,15 @@ const getAllFiles = async (_path, _dataJson) => {
     if (isFile) {
       _dataJson.file.push(filename)
       const filecontent = fs.readFileSync(filedir, 'utf-8')
-      const reg = /\#[0-9a-fA-F]{3}\;|\#[0-9a-fA-F]{6}\;/g // 正则匹配十六进制颜色
-      if (filecontent.match(reg)) { // 正则匹配颜色
-        filecontent.match(reg).forEach((color) => {
+      // 匹配16进制颜色
+      const reg1 = /\#[0-9a-fA-F]{6}\;/g // 正则匹配十六进制颜色 三位缩写已经都扩展成六位了
+      // 正则匹配rbg颜色
+      const reg2 = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\;/g
+      // 正则匹配rgba颜色
+      const reg3 = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\;/g
+      if (filecontent.match(reg1) || filecontent.match(reg2) || filecontent.match(reg3)) { // 正则匹配颜色
+        const colors = filecontent.match(reg1) || filecontent.match(reg2) || filecontent.match(reg3)
+        colors.forEach((color) => {
           if (oXcolor.hasOwnProperty(color)) {
             oXcolor[color]++
             colorFile[color].push(filedir)
