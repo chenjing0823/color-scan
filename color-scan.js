@@ -22,6 +22,7 @@ const getAllFiles = async (_path, _dataJson) => {
     _dataJson.file = []
   }
   files.forEach(async(filename) => {
+
     const filedir = path.join(_path, filename)
     const stats = fs.statSync(filedir)
     // 是否是文件
@@ -29,8 +30,17 @@ const getAllFiles = async (_path, _dataJson) => {
     // 是否是文件夹
     const isDir = stats.isDirectory()
     if (isFile) {
+      // 如果不是vue文件先跳过
+      if (!filename.endsWith('.vue')) return
+
       _dataJson.file.push(filename)
-      const filecontent = fs.readFileSync(filedir, 'utf-8')
+      let filecontent = fs.readFileSync(filedir, 'utf-8')
+
+      const styleReg = /<style[^>]*>([\s\S]*?)<\/style>/g
+      if (styleReg.test(filecontent)) {
+        filecontent = filecontent.match(styleReg).join('')
+      }
+
       // 匹配16进制颜色
       const reg1 = /\#[0-9a-fA-F]{6}\;/g // 正则匹配十六进制颜色 三位缩写已经都扩展成六位了
       // 正则匹配rbg颜色
